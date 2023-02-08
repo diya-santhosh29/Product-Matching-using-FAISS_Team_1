@@ -25,6 +25,6 @@ Make sure to download and install the ChromeDriver or any other WebDriver compat
 Usage
 
 The code for scraping the data is contained in the Smartwatches_Flipkart.py and Smart_watches_amazon.py file.
-The csv files corresponding to the scraped data is Smartwatch_Flipkart_5.xlsx and smart_watches_amazon.csv.
+The files corresponding to the scraped data is Smartwatch_Flipkart_5.xlsx and smart_watches_amazon.csv.
 
 
