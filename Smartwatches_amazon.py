@@ -1,4 +1,4 @@
-#Importing necessary packages
+#Importing necessary libraries
 
 import selenium
 from selenium import webdriver
@@ -11,6 +11,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
 
+
+
+# List of brand names
 brands = ['Fire-Boltt','Noise','boAt','CrossBeats','Samsung','ZEBRONICS','Fastrack','TAGG','Apple','Fitbit','Titan']
 
 #Creating an empty list "data" to store the scraped information
@@ -30,9 +33,9 @@ for brand in brands:
         links = driver.find_elements(By.TAG_NAME,"h2")
 
         #The script then extracts the product URLs from the page using the "find_elements" method and the "By.TAG_NAME" locator.
-        for i in links:
+        for link in links:
             try:
-                link2 = i.find_element(By.TAG_NAME,"a")
+                link2 = link.find_element(By.TAG_NAME,"a")
                 urls.append(link2.get_attribute("href"))
             except Exception as e:
                 print(f"Error accessing page: {e}")
@@ -40,19 +43,19 @@ for brand in brands:
 
         #In the next loop, the script navigates to each product URL and extracts the product name, price and specifications using the "find_element" method and the "By.XPATH" locator.
         #The extracted information is stored in dictionaries "dict_price", "dict_name", and "details_dict".
-        for l in (urls):
-            driver.get(l)
-            details_dict = {}
-            dict_price = {}
-            dict_name = {}
+        for url in (urls):
+            driver.get(url)
+            Product_details_dictionary = {}
+            Product_price_dictionary = {}
+            Product_name_dictionary = {}
             try:
                 product_price = driver.find_element(By.XPATH,"//span[@class='a-price-whole']").text
             except:
                 product_price = "nan"
-            dict_price['price'] = product_price
+            Product_price_dictionary['price'] = product_price
 
             name = driver.find_element(By.XPATH,"//span[@class='a-size-large product-title-word-break']").text
-            dict_name['Name'] = name
+            Product_nmae_dictionary['Name'] = name
 
             # try to find the attribute table
             try:
@@ -69,7 +72,7 @@ for brand in brands:
                         attribute_value = row.find_element(By.XPATH, './/td[2]/span[@class="a-size-base po-break-word"]').text
 
                         # Add the specification name and value to the dictionary
-                        details_dict[attribute_name] = attribute_value
+                        Product_details_dictionary[attribute_name] = attribute_value
                 except NoSuchElementException:
                     print("no specification")
                 pass
@@ -80,16 +83,16 @@ for brand in brands:
             pass
 
             #The dictionaries are merged and added to the "data" list.
-            dict_name.update(dict_price)
-            dict_name.update(details_dict)
-            data.append(dict_name)
+            Product_name_dictionary.update(Product_price_dictionary)
+            Product_name_dictionary.update(Product_details_dictionary)
+            data.append(Product_name_dictionary)
 
             #Finally, the script prints the "data" list to verify the extracted information.
             print(data)
 
 #creating a Pandas DataFrame from the list data
-d=pd.DataFrame(data)
-d
+Amazon_data_frame=pd.DataFrame(data)
+Amazon_data_frame
 
 #storing the dataframe into a CSV file named "smart_watches_amazon.csv".
-d.to_csv("smart_watches_amazon.csv", index=False)
+Amazon_data_frame.to_csv("smart_watches_amazon.csv", index=False)
