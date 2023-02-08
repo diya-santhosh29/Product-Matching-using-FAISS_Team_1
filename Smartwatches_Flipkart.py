@@ -19,7 +19,7 @@ smartwatch_size=[]
 
 
 
-#"boAt" , "APPLE", "Noise", "CrossBeats", "Fastrack", "ZEBRONICS", "TAGG", "Titan","FITBIT"
+
 
 # List of top 10 smartwatch brands
 brand_name =["Samsung","boAt" , "Noise", "CrossBeats", "Fastrack", "ZEBRONICS", "TAGG", "Titan","FITBIT","APPLE"]
