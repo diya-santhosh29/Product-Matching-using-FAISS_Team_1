@@ -24,9 +24,7 @@ pip install faiss/numpy/pandas/selenium/openpyxl
 Make sure to download and install the ChromeDriver or any other WebDriver compatible with Selenium before running the code.
 Usage
 
-The code for scraping the data is contained in the data_scraping.py file. The main code for product matching is contained in the product_matching.py file. You can run the code using the following commands:
-
-python data_scraping.py
-python product_matching.py
+The code for scraping the data is contained in the Smartwatches_Flipkart.py and Smart_watches_amazon.py file.
+The csv files corresponding to the scraped data is Smartwatch_Flipkart_5.xlsx and smart_watches_amazon.csv.
 
 
