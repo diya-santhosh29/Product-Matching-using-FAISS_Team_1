@@ -29,12 +29,4 @@ The code for scraping the data is contained in the data_scraping.py file. The ma
 python data_scraping.py
 python product_matching.py
 
-## Contributing
 
-Contributions to this project are welcome. If you would like to contribute, please follow these steps:
-
-    Fork the repository
-    Create a new branch for your feature
-    Commit your changes
-    Push the branch to your fork
-    Create a pull request
