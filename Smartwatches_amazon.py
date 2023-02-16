@@ -26,7 +26,7 @@ def Product_links(product):
     #Collecting based on brands contains 3 pages
 
     for brand in brands:
-        for pages in range(3):
+        for pages in range(10):
                     driver.get("https://www.amazon.in/s?k=smart+watches&i=electronics&bbn=976419031&rh=n%3A976419031%2Cp_89%3A{brand}&dc&crid=17ZO8YTX0FCN4&qid"
                                "=1675261614&rnid=3837712031&sprefix=%2Caps%2C200&ref=sr_pg_{pages}".format(brand=brand, pages=pages))
                     #collecting products link
