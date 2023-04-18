@@ -22,7 +22,7 @@ smartwatch_size=[]
 
 
 # List of top 10 smartwatch brands
-brand_name =["Samsung","boAt","Noise", "CrossBeats", "Fastrack", "ZEBRONICS", "TAGG", "Titan","FITBIT","APPLE"]
+brand_name =["Fire-Boltt","boAt","Noise", "CrossBeats", "Fastrack", "ZEBRONICS",'Samsung' "TAGG", "Titan","FITBIT","APPLE"]
 #Opening the driver
 driver = webdriver.Chrome('/home/diya/Downloads/chromedriver_linux64 (2)/chromedriver')
 driver.maximize_window()
@@ -99,7 +99,7 @@ for brand in brand_name:
             pass
 
 #Merging the attributes
-final=zip(smartwatch_brand,smartwatch_name,smartwatch_discounted_price,smartwatch_original_price,smartwatch_rating,smartwatch_strap_color,smartwatch_model,smartwatch_size)
+final=zip(product_link,smartwatch_brand,smartwatch_name,smartwatch_discounted_price,smartwatch_original_price,smartwatch_rating,smartwatch_strap_color,smartwatch_model,smartwatch_size)
 
 # Initialize a new Excel workbook
 wb=openpyxl.Workbook()
@@ -107,12 +107,12 @@ wb=openpyxl.Workbook()
 sheet1=wb.active
 
 # Loop through the final list and add each row to the worksheet
-#sheet1.append=(['Brand','Product Name','Discounted Price', 'Original Price', 'Product Rating','Strap Color','Model','Size'])
+#sheet1.append=(['Product Link','Brand','Product Name','Discounted Price', 'Original Price', 'Product Rating','Strap Color','Model','Size'])
 for x in list(final):
     sheet1.append(x)
 
 # Save the workbook to the specified file name
-wb.save("SmartWatch_Flpikart_6.xlsx")
+wb.save("SmartWatch_Flpikart_5.xlsx")
 
 
 
