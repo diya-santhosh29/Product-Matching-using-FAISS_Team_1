@@ -3,22 +3,14 @@
 
 # Here, we are attempting to determine the similarity between products available on Amazon and Flipkart based solely on their product names.
 # Taking the product name from Amazon and comparing it for similarity with the products available on Flipkart.
-
-# In[1]:
-
-
-#flipkart data importing
+# Importing flipkart data
 
 import pandas as pd
 flipkart_data=pd.read_csv(r"C:\Users\Arishma\Downloads\SmartWatch_Flpikart_5 (2).csv")
 flipkart_data.head(10)
 
 
-# In[2]:
-
-
 #Vectorization of flipkart data
-
 from sentence_transformers import SentenceTransformer
 text = flipkart_data["Product Name"]
 encoder = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
@@ -26,52 +18,32 @@ vectors = encoder.encode(text)
 vectors.shape
 
 
-# In[3]:
-
-
 #Creating FAISS indexes for Flipkart data based on Euclidean distance.
 #Normalization is done to avoid distance from 0 to infinite
-
 import faiss
-
 vector_dimension = vectors.shape[1]
 index = faiss.IndexFlatL2(vector_dimension)
 faiss.normalize_L2(vectors)
 index.add(vectors)
 
 
-# In[4]:
-
-
 #importing the Amazon data
-
 Amazon_data=pd.read_excel(r"C:\Users\Arishma\ds_1.xlsx")
 Amazon_data.head(10)
 
 
-# In[5]:
-
-
 #Selecting a specific product's information from the "Name" column and using it as a query for the similarity search.
-
 query=Amazon_data.iloc[2,0]
-query
 
-
-# In[6]:
 
 
 #converting the selected query product details into vector
-
 import numpy as np
 query=Amazon_data.iloc[0,0]
 search_text = query
 search_vector = encoder.encode(search_text)
 _vector = np.array([search_vector])
 faiss.normalize_L2(_vector)
-
-
-# In[7]:
 
 
 #We are searching for the Amazon query in the Flipkart data by using the FAISS index created for the Flipkart products. 
@@ -83,22 +55,13 @@ distances, ann = index.search(_vector, k=k)
 #similarity is calculated
 similarity=1/(1+distances)
 
-
-# In[8]:
-
-
 #We will then store these metrics in a pandas DataFrame for further analysis and visualization
 #The ann is the approximate nearest neighbour corresponding to that distance, meaning that ann 0 is the vector at position 0 in the index. Similarly, ann 3 is the vector at position 3 in the index — based on the order of text vectors from step 1.
-
-
 results = pd.DataFrame({'Similarity' : similarity[0],'Distances': distances[0], 'vector position': ann[0]})
 
 
-# In[9]:
-
-
-import os as o
 # Function to convert file path into clickable form.
+import os as o
 def fun(path):
     
     # returns the final component of a url
@@ -108,29 +71,15 @@ def fun(path):
     return '<a href="{}">{}</a>'.format(path, f_url)
 
 
-# In[10]:
-
 
 #combining the formed dataframe with our flipkart data 
-
-merge=pd.merge(results,flipkart_data,left_on="vector position",right_index=True)
-
-
-# In[11]:
-
+Output=pd.merge(results,flipkart_data,left_on="vector position",right_index=True)
 
 # applying function "fun" on column "Product Link".
-merge = merge.style.format({'Product Link' : fun})
-merge
+Output = Output.style.format({'Product Link' : fun})
+Output
 
 
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
