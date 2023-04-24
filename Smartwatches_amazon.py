@@ -96,4 +96,4 @@ d=pd.DataFrame(data)
 d
 
 #storing the dataframe into a CSV file named "smart_watches_amazon.csv".
-d.to_csv("smart_watches_amazon.csv", index=False)
+d.to_csv("smart_watches_amazon.csv",na_rep='NaN',index=False)
