@@ -6,7 +6,7 @@
 # Importing flipkart data
 
 import pandas as pd
-flipkart_data=pd.read_csv(r"C:\Users\Arishma\Downloads\SmartWatch_Flpikart_5 (2).csv")
+flipkart_data=pd.read_csv("https://github.com/diya-santhosh29/Product-Matching-using-FAISS_Team_1/blob/main/SmartWatch_Flpikart_5.xlsx?raw=true")
 flipkart_data.head(10)
 
 
@@ -28,7 +28,7 @@ index.add(vectors)
 
 
 #importing the Amazon data
-Amazon_data=pd.read_excel(r"C:\Users\Arishma\ds_1.xlsx")
+Amazon_data=pd.read_excel("https://github.com/diya-santhosh29/Product-Matching-using-FAISS_Team_1/blob/main/smart_watches_amazon.xlsx?raw=true")
 Amazon_data.head(10)
 
 
@@ -49,7 +49,7 @@ faiss.normalize_L2(_vector)
 #We are searching for the Amazon query in the Flipkart data by using the FAISS index created for the Flipkart products. 
 #We will retrieve the closest matching products based on the distance between the query and the Flipkart products' names.
 
-k = index.ntotal
+k = 10
 distances, ann = index.search(_vector, k=k)
 
 #similarity is calculated
@@ -73,7 +73,7 @@ def fun(path):
 
 
 #combining the formed dataframe with our flipkart data 
-Output=pd.merge(results,flipkart_data,left_on="vector position",right_index=True)
+Output=pd.merge(results,flipkart_data,left_on="Vector position",right_index=True)
 
 # applying function "fun" on column "Product Link".
 Output = Output.style.format({'Product Link' : fun})
