@@ -6,7 +6,7 @@
 # Importing flipkart data
 
 import pandas as pd
-flipkart_data=pd.read_csv("https://github.com/diya-santhosh29/Product-Matching-using-FAISS_Team_1/blob/main/SmartWatch_Flpikart_5.xlsx?raw=true")
+flipkart_data=pd.read_excel("https://github.com/diya-santhosh29/Product-Matching-using-FAISS_Team_1/blob/main/SmartWatch_Flpikart_5.xlsx?raw=true")
 flipkart_data.head(10)
 
 
