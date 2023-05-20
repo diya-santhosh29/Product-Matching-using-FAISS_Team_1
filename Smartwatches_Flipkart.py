@@ -1,119 +1,100 @@
-#Importing the necessary libraries
 import pandas as pd
 from selenium import webdriver
-import openpyxl
-from time import sleep
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import  NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException
+import openpyxl
 
+# Initiating empty list for product details
+product_details = []
 
-#Initiating empty lists
-smartwatch_name=[]
-smartwatch_brand=[]
-smartwatch_discounted_price=[]
-smartwatch_rating=[]
-smartwatch_original_price=[]
-smartwatch_color=[]
-smartwatch_strap_color=[]
-smartwatch_model=[]
-smartwatch_size=[]
+# Defining a function to fetch attributes
+def get_attribute(element, xpath):
+    try:
+        attribute_elements = element.find_elements(By.XPATH, xpath)
+        return [elem.text for elem in attribute_elements]
+    except NoSuchElementException:
+        return []
 
+# Defining a function to scrape product details from a given link
+def scrape_product_details(link, brand):
+    driver.get(link)
 
+    # Create a dictionary to store the product details
+    details = {'Product_Link': link, 'Brand': brand}
 
-# List of top 10 smartwatch brands
-brand_name =["Fire-Boltt","boAt","Noise", "CrossBeats", "Fastrack", "ZEBRONICS",'Samsung' "TAGG", "Titan","FITBIT","APPLE"]
-#Opening the driver
-driver = webdriver.Chrome('/home/diya/Downloads/chromedriver_linux64 (2)/chromedriver')
-driver.maximize_window()
+    # Scraping the product name
+    product_name = get_attribute(driver, "//span[@class='B_NuCI']")
+    details['Product_Name'] = product_name
 
-#Defining a function for appending fetched elements into a list
-def attribute_function(list_name,final_list_name):
-    for numbers in list_name:
-    final_list_name.append(numbers.text)
+    # Scraping discounted price
+    discounted_price = get_attribute(driver, "//div[@class='_30jeq3 _16Jk6d']")
+    details['Discounted_Price'] = discounted_price
 
+    # Scraping product rating
+    rating = get_attribute(driver, "//div[@class='gUuXy- _16VRIQ']//child::div")
+    details['Product_Rating'] = rating
 
-# Giving the brand name and page numbers in a loop
-for brand in brand_name:
-    for page in range(1,10): #Scrape data of first 9 pages of each brand
+    # Scraping original price
+    original_price = get_attribute(driver, "//div[@class='_3I9_wc _2p6lqe']")
+    details['Original_Price'] = original_price
 
-        # Navigate to the given URL
-        driver.get("https://www.flipkart.com/search?q=smartwatches&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.brand%255B%255D%3D{}&page={}".format(brand, page))
-        driver.implicitly_wait(10)
+    # To get attributes from the specifications table
+    for specifications in range(1, 15):
+        feature_element = driver.find_element(By.XPATH, f"(//td[@class='_1hKmbr col col-3-12'])[position()={specifications}]")
+        feature_name = feature_element.text
 
-        #Creating a list of product links
-        elems = driver.find_elements(By.CLASS_NAME,'_1fQZEK')
-        product_link = []
-        for elem in elems:
-            href = elem.get_attribute('href')
-            product_link.append(href)
-            if href is not None:
-                print(href)
-
-
-        #Scraping the necessary attributes
         try:
-            #Parsing through different links from the list
-            for links in product_link:
-                driver.get("{}".format(links))
-                #Appending brand name to the list
-                smartwatch_brand.append(brand)
+            feature_value_element = driver.find_element(By.XPATH, f"(//td[@class='URwL2w col col-9-12'])[position()={specifications}]")
+            feature_value = feature_value_element.text
 
-                #Scraping the product name
-                product_name=driver.find_elements(By.XPATH,"//span[@class='B_NuCI']")
-                attribute_function(product_name,smartwatch_name)
-
-                #Scraping discounted price
-                discounted_product_price = driver.find_elements(By.XPATH,"//div[@class='_30jeq3 _16Jk6d']")
-                attribute_function(discounted_product_price,smartwatch_discounted_price)
-
-                #Scraping product rating
-                product_rating = driver.find_elements(By.XPATH,"//div[@class='gUuXy- _16VRIQ']//child::div")
-                attribute_function(product_rating,smartwatch_rating)
-
-                #Scraping original price
-                original_product_price = driver.find_elements(By.XPATH,"//div[@class='_3I9_wc _2p6lqe']")
-                attribute_function(original_product_price,smartwatch_original_price)
-
-
-                #To get attributes from the specifications table
-                for specifications in range(1,15):
-                    feature = driver.find_element(By.XPATH,("(//td[@class='_1hKmbr col col-3-12'])[position()={}]".format(specifications)))
-                    try:
-                        #To get Strap Color
-                        if (feature.text=="Strap Color"):
-                            feature1= driver.find_element(By.XPATH,("(//td[@class='URwL2w col col-9-12'])[position()={}]".format(specifications)))
-                            #print(feature1.text)
-                            smartwatch_strap_color.append(feature1.text)
-                        #To get Model Number
-                        elif feature.text == "Model Number":
-                            feature2 = driver.find_element(By.XPATH,("(//td[@class='URwL2w col col-9-12'])[position()={}]".format(specifications)))
-                            smartwatch_model.append(feature2.text)
-                        #To get Size
-                        elif feature.text == "Size":
-                            feature3= driver.find_element(By.XPATH,("(//td[@class='URwL2w col col-9-12'])[position()={}]".format(specifications)))
-                            smartwatch_size.append(feature3.text)
-                    except NoSuchElementException:
-                        pass
+            if feature_name == "Strap Color":
+                details['Strap_Color'] = feature_value
+            elif feature_name == "Model Number":
+                details['Model'] = feature_value
+            elif feature_name == "Size":
+                details['Size'] = feature_value
         except NoSuchElementException:
             pass
 
-#Merging the attributes
-final=zip(product_link,smartwatch_brand,smartwatch_name,smartwatch_discounted_price,smartwatch_original_price,smartwatch_rating,smartwatch_strap_color,smartwatch_model,smartwatch_size)
+    return details
 
-# Initialize a new Excel workbook
-wb=openpyxl.Workbook()
-# Get the active worksheet
-sheet1=wb.active
+# List of top 10 smartwatch brands
+brand_names = ["Fire-Boltt", "boAt", "Noise", "CrossBeats", "Fastrack", "ZEBRONICS", "Samsung", "TAGG", "Titan", "FITBIT", "APPLE"]
+# Opening the driver
+driver = webdriver.Chrome('/home/diya/Downloads/chromedriver_linux64 (4)/chromedriver')
+driver.maximize_window()
 
-# Loop through the final list and add each row to the worksheet
-#sheet1.append=(['Product Link','Brand','Product Name','Discounted Price', 'Original Price', 'Product Rating','Strap Color','Model','Size'])
-for x in list(final):
-    sheet1.append(x)
+# Giving the brand name and page numbers in a loop
+for brand in brand_names:
+    for page in range(1, 10): # Scrape data of first 9 pages of each brand
 
-# Save the workbook to the specified file name
-wb.save("SmartWatch_Flpikart_5.xlsx")
+        # Navigate to the given URL
+        driver.get(f"https://www.flipkart.com/search?q=smartwatches&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&p%5B%5D=facets.brand%255B%255D%3D{brand}&page={page}")
+        driver.implicitly_wait(10)
 
+        # Creating a list of product links
+        elems = driver.find_elements(By.CLASS_NAME, 'IRpwTa')
+        product_links = [elem.get_attribute('href') for elem in elems if elem.get_attribute('href') is not None]
+
+        # Scraping the necessary attributes
+        try:
+            # Parsing through different links from the list
+            for link in product_links:
+                details = scrape_product_details(link, brand)
+                product_details.append(details)
+
+        except NoSuchElementException:
+            pass
+
+# Close the driver
+driver.quit()
+
+# Convert the list of product details to a DataFrame
+df = pd.DataFrame(product_details)
+
+# Save the DataFrame to an Excel file
+with pd.ExcelWriter('SmartWatch_Flpikart.xlsx') as writer:
+    df.to_excel(writer, index=False)
 
 
 
