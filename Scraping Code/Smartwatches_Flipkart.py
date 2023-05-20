@@ -84,7 +84,7 @@ for brand in brand_names:
                 product_details.append(details)
 
         except NoSuchElementException:
-            pass
+             print("No specifications")
 
 # Close the driver
 driver.quit()
