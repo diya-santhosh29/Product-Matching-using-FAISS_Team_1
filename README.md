@@ -14,6 +14,8 @@ This project aims to create a product matching system for smart watches that can
     Selenium
     openpyxl
     ChromeDriver or any other WebDriver compatible with Selenium
+    String
+    Sentence transformer
 
 ## Installation
 
