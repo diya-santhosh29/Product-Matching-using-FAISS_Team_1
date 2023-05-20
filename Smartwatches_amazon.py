@@ -9,7 +9,7 @@ from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
 
 # Setting up the Chrome web driver
-driver = webdriver.Chrome("path/to/chromedriver")
+driver = webdriver.Chrome("home/futures/Desktop/chromedriver")
 
 # Function to extract product URLs from the page
 def get_product_urls(brand, num_pages):
