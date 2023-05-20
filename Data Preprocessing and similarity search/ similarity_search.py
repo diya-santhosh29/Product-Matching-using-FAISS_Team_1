@@ -1,3 +1,4 @@
+# Importing needed libraries
 import pandas as pd
 import string
 import faiss
